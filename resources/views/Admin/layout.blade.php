@@ -66,7 +66,12 @@
                             
                             <div class="header-button">
                                 <div class="noti-wrap">
-                                    
+                                <div class=" js-item-menu">
+                                        <a href="logout">
+                                            <i class="zmdi zmdi-power"></i>
+                                            Logout
+                                        </a>  
+                                    </div>
                                     
                                     
                                 </div>
