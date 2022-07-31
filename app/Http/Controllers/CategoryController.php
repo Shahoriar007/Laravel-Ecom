@@ -22,5 +22,23 @@ class CategoryController extends Controller
         return view('admin/manage_category');
     }
 
-    
+    public function manage_category_process(Request $request)
+    {
+        // return $request->post();
+
+        //validation
+        $request->validate([
+            'category_name'=>'required',
+            'category_slug'=>'required|unique:categories',
+        ]);
+
+        // save in database
+        $model = new Category();
+        $model->category_name=$request->{'category_name'};
+        $model->category_slug=$request->{'category_slug'};
+        $model->save();
+
+        $request->session()->flash('message','Category Inserted');
+        return redirect('admin/category');
+    }
 }

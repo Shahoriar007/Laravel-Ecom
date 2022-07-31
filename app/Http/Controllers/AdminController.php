@@ -13,8 +13,13 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->session()->has('ADMIN_LOGIN')){
+            return redirect('admin/dashboard');
+        }else{
+            return view('admin.login');
+        }
         return view('admin.login');
     }
 

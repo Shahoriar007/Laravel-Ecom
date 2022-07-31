@@ -3,6 +3,8 @@
 @section('container')
     <h3>Category</h3>
 
+    {{session('message')}}
+
     <div class="card-body">
         <a href="manage_category">
         <button type="button" class="btn btn-success">Add Category</button>
