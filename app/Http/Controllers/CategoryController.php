@@ -13,8 +13,10 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('admin/category');
+    {   
+        // Show data from database
+        $result['data']=Category::all();
+        return view('admin/category',$result);
     }
 
     public function manage_category()
@@ -38,6 +40,7 @@ class CategoryController extends Controller
         $model->category_slug=$request->{'category_slug'};
         $model->save();
 
+        // Show success massage
         $request->session()->flash('message','Category Inserted');
         return redirect('admin/category');
     }
