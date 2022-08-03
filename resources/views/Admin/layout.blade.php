@@ -42,11 +42,11 @@
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
                 <li class="active has-sub">
-                    <a class="js-arrow" href="dashboard">
+                    <a class="js-arrow" href="{{url('admin/dashboard')}}">
                         <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                 </li>
                 <li>
-                    <a href="category">
+                    <a href="{{url('admin/category')}}">
                         <i class="fas fa-chart-bar"></i>Category</a>
                 </li>
                
@@ -67,7 +67,7 @@
                             <div class="header-button">
                                 <div class="noti-wrap">
                                 <div class=" js-item-menu">
-                                        <a href="logout">
+                                        <a href="{{url('admin/logout')}}">
                                             <i class="zmdi zmdi-power"></i>
                                             Logout
                                         </a>  

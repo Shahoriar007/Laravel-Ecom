@@ -6,7 +6,7 @@
     {{session('message')}}
 
     <div class="card-body">
-        <a href="manage_category">
+        <a href="category/manage_category">
         <button type="button" class="btn btn-success">Add Category</button>
         </a>
     </div>
@@ -30,7 +30,14 @@
                                                 <td>{{$list->id}}</td>
                                                 <td>{{$list->category_name}}</td>
                                                 <td>{{$list->category_slug}}</td>
-                                                <td></td>
+                                                <td>
+                                                    <a href="{{url('admin/category/delete/')}}/{{$list->id}}">
+                                                        <button type="button" class="btn btn-danger">Delete</button>
+                                                    </a>
+                                                    <a href="{{url('admin/category/manage_category/')}}/{{$list->id}}">
+                                                        <button type="button" class="btn btn-success">Edit</button>
+                                                    </a>
+                                                </td>
                                             </tr>
 
                                             @endforeach
