@@ -1,5 +1,7 @@
 @extends('admin/layout')
 
+@section('page_title','Manage Category')
+
 @section('container')
     <h3>Manage Category</h3>
 
