@@ -49,6 +49,11 @@
                     <a href="{{url('admin/category')}}">
                         <i class="fas fa-chart-bar"></i>Category</a>
                 </li>
+
+                <li>
+                    <a href="{{url('admin/coupon')}}">
+                        <i class="fas fa-chart-bar"></i>Coupon</a>
+                </li>
                
             </ul>
         </nav>
