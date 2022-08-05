@@ -56,6 +56,7 @@ class CategoryController extends Controller
         // save in database
         $model->category_name=$request->{'category_name'};
         $model->category_slug=$request->{'category_slug'};
+        $model->status=1;
         $model->save();
 
         // Show success massage
@@ -68,6 +69,15 @@ class CategoryController extends Controller
         $model=Category::find($id);
         $model->delete();
         $request->session()->flash('message','Category Deleted');
+        return redirect('admin/category');
+    }
+
+    public function status(Request $request, $status, $id)
+    {
+        $model=Category::find($id);
+        $model->status=$status;
+        $model->save();
+        $request->session()->flash('message','Category Status Updated');
         return redirect('admin/category');
     }
 
