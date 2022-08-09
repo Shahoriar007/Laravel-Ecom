@@ -63,7 +63,12 @@
 
                 <li class="@yield('color_select')">
                     <a href="{{url('admin/color')}}">
-                        <i class="fas fa-window-maximize"></i>Color</a>
+                        <i class="fas fa-paint-brush"></i>Color</a>
+                </li>
+
+                <li class="@yield('product_select')">
+                    <a href="{{url('admin/product')}}">
+                        <i class="fas fa-product-hunt"></i>Product</a>
                 </li>
                
             </ul>
