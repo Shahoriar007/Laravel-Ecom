@@ -39,6 +39,16 @@ class ProductController extends Controller
             $result['warrenty']=$arr['0']->warrenty;
             $result['status']=$arr['0']->status;
             $result['id']=$arr['0']->id;
+
+            $result['productAttrArr']=DB::table('products_attr')->where(['products_id'=>$id])->get();
+
+            // Print data
+            // echo '<pre>';
+            // print_r($result['productAttrArr']);
+            // die();
+
+             
+
         }else{
             $result['category_id']='';
             $result['name']='';
@@ -54,9 +64,24 @@ class ProductController extends Controller
             $result['warrenty']='';
             $result['status']='';
             $result['id']='0';
+
+            $result['productAttrArr'][0]['id']='';
+            $result['productAttrArr'][0]['products_id']='';
+            $result['productAttrArr'][0]['sku']='';
+            $result['productAttrArr'][0]['attr_image']='';
+            $result['productAttrArr'][0]['mrp']='';
+            $result['productAttrArr'][0]['price']='';
+            $result['productAttrArr'][0]['qyt']='';
+            $result['productAttrArr'][0]['size_id']='';
+            $result['productAttrArr'][0]['color_id']='';
         }
 
+        // for dropdown
         $result['category']=DB::table('categories')->where('status','=',1)->get();
+
+        $result['sizes']=DB::table('sizes')->where('status','=',1)->get();
+
+        $result['colors']=DB::table('colors')->where('status','=',1)->get();
 
         return view('admin/manage_product', $result);
     }
@@ -111,6 +136,48 @@ class ProductController extends Controller
         $model->status=1;
         $model->save();
 
+        $pid=$model->id;
+
+        // Attribute Adding
+        $paidArr=$request->post('paid');
+        $skuArr=$request->post('sku');
+        $mrpArr=$request->post('mrp');
+        $priceArr=$request->post('price');
+        $qytArr=$request->post('qyt');
+        $size_idArr=$request->post('size_id');
+        $color_idArr=$request->post('color_id');
+
+        foreach($skuArr as $key=>$val){
+
+            $productAttrArr['products_id']=$pid;
+            $productAttrArr['sku']=$skuArr[$key];
+            $productAttrArr['attr_image']='test';
+            $productAttrArr['mrp']=$mrpArr[$key];
+            $productAttrArr['price']=$priceArr[$key];
+            $productAttrArr['qyt']=$qytArr[$key];
+
+            if($size_idArr[$key]==''){
+                $productAttrArr['size_id']=0;
+            }else{
+                $productAttrArr['size_id']=$size_idArr[$key];
+            }
+
+            if($color_idArr[$key]==''){
+                $productAttrArr['color_id']=0;
+            }else{
+                $productAttrArr['color_id']=$color_idArr[$key];
+            }
+
+            // Update or insert
+
+            if ($paidArr[$key]!=''){
+                DB::table('products_attr')->where(['id'=>$paidArr[$key]])->update($productAttrArr);
+            }else{
+                DB::table('products_attr')->insert($productAttrArr);
+            }
+
+        }
+
         // Show success massage
         $request->session()->flash('message', $msg);
         return redirect('admin/product');
@@ -122,6 +189,12 @@ class ProductController extends Controller
         $model->delete();
         $request->session()->flash('message','Product Deleted');
         return redirect('admin/product');
+    }
+
+    public function product_attr_delete(Request $request, $paid, $pid)
+    {
+        DB::table('products_attr')->where(['id'=>$paid])->delete();
+        return redirect('admin/product/manage_product/'.$pid);
     }
 
     public function status(Request $request, $status, $id)
