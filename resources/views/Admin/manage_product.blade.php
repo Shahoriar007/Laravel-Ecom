@@ -12,7 +12,25 @@
     {{$image_required="required"}}
 @endif
 
+
+
 <h3>Manage Product</h3>
+
+@if(session()->has('sku_error'))
+
+<!-- Do some style if you want -->
+
+    {{session('sku_error')}}
+
+@endif
+
+@error('attr_image.*')
+
+<!-- Do some style if you want -->
+
+    {{$message}}
+
+@enderror
 
 <div class="card-body">
     <a href="{{url('admin/product')}}">
@@ -21,7 +39,7 @@
 </div>
 
 <div class="card">
-    <div class="card-header">Manage Products</div>
+
     <div class="card-body">
         <hr />
 
@@ -200,6 +218,10 @@
                             <label for="qyt" class="control-label mb-1">Qyt</label>
                             <input id="qyt" name="qyt[]" type="text" value="{{$pAArr['qyt']}}" class="form-control" aria-required="true" aria-invalid="false" />
                         </div>
+
+                        @if($pAArr['attr_image']!='')
+                            <img width="100px" src="{{asset('storage/media/'.$pAArr['attr_image'])}}">
+                        @endif
 
                         <div class="col-md-4 form-group">
                             <label for="attr_image" class="control-label mb-1">Image</label>

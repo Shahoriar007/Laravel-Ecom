@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class ProductController extends Controller
 {
     /**
@@ -102,7 +103,29 @@ class ProductController extends Controller
             'name'=>'required',
             'image'=>$image_validation,
             'slug'=>'required|unique:products,slug,'.$request->post('id'),
+            'attr_image.*'=>'mimes:jpeg,jpg,png'
         ]);
+
+        // sku unique
+
+        $paidArr=$request->post('paid');
+        $skuArr=$request->post('sku');
+        $mrpArr=$request->post('mrp');
+        $priceArr=$request->post('price');
+        $qytArr=$request->post('qyt');
+        $size_idArr=$request->post('size_id');
+        $color_idArr=$request->post('color_id');
+
+        foreach($skuArr as $key=>$val){
+            $check=DB::table('products_attr')->
+            where('sku','=',$skuArr[$key])->
+            where('id','!=',$paidArr[$key])->get();
+
+            if(isset($check[0])){
+                $request->session()->flash('sku_error',$skuArr[$key] .'  SKU Already used');
+                return redirect(request()->headers->get('referer'));
+            }
+        }
 
         if($request->post('id')>0){
             $model=Product::find($request->post('id'));
@@ -139,19 +162,19 @@ class ProductController extends Controller
         $pid=$model->id;
 
         // Attribute Adding
-        $paidArr=$request->post('paid');
-        $skuArr=$request->post('sku');
-        $mrpArr=$request->post('mrp');
-        $priceArr=$request->post('price');
-        $qytArr=$request->post('qyt');
-        $size_idArr=$request->post('size_id');
-        $color_idArr=$request->post('color_id');
+        // $paidArr=$request->post('paid');
+        // $skuArr=$request->post('sku');
+        // $mrpArr=$request->post('mrp');
+        // $priceArr=$request->post('price');
+        // $qytArr=$request->post('qyt');
+        // $size_idArr=$request->post('size_id');
+        // $color_idArr=$request->post('color_id');
 
         foreach($skuArr as $key=>$val){
 
             $productAttrArr['products_id']=$pid;
             $productAttrArr['sku']=$skuArr[$key];
-            $productAttrArr['attr_image']='test';
+            
             $productAttrArr['mrp']=$mrpArr[$key];
             $productAttrArr['price']=$priceArr[$key];
             $productAttrArr['qyt']=$qytArr[$key];
@@ -166,6 +189,20 @@ class ProductController extends Controller
                 $productAttrArr['color_id']=0;
             }else{
                 $productAttrArr['color_id']=$color_idArr[$key];
+            }
+
+            // multiple image save
+
+            if($request->hasFile("attr_image.$key")){
+                $rand=rand('1111111','9999999');
+
+                $attr_image=$request->file("attr_image.$key");
+                $ext=$attr_image->extension();
+                $image_name=$rand.'.'.$ext;
+                $request->file("attr_image.$key")->storeAs('/public/media',$image_name);
+                $productAttrArr['attr_image']=$image_name;
+            }else{
+                $productAttrArr['attr_image']='';
             }
 
             // Update or insert
